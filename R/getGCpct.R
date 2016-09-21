@@ -1,11 +1,11 @@
-getGCpct <- function(chrom, pos, gbuild=c("hg19", "hg18", "mm9", "mm10")) {
+getGCpct <- function(chrom, pos, gbuild=c("hg19", "hg38", "hg18", "mm9", "mm10")) {
     gbuild <- match.arg(gbuild)
     # check that the chromosome is valid
     if (length(chrom) > 1) {
         warning("only the first element of chrom is used")
         chrom <- chrom[1]
     }
-    if (gbuild %in% c("hg19", "hg18")) {
+    if (gbuild %in% c("hg19", "hg38", "hg18")) {
         if (is.character(chrom)) {
             chrom <- match(chrom, c(1:22, "X", "Y", "MT"))
         } else {

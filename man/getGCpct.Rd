@@ -7,15 +7,15 @@
   1000 base window centered at the genomic position.
 }
 \usage{
-  getGCpct(chrom, pos, gbuild = c("hg19", "hg18", "mm9", "mm10"))
+  getGCpct(chrom, pos, gbuild = c("hg19", "hg38", "hg18", "mm9", "mm10"))
 }
 \arguments{
   \item{chrom}{Chromosome of interest. Only one chromosome can be
     specified at a time. For humans it can be 1-22, X(23), Y(24) or
     MT(25). For  mouse it can be 1-19, X(20), Y(21) or MT(22).}
   \item{pos}{Genomic positions in the chromosome of interest}
-  \item{gbuild}{Genome build. Available builds are hg18 and hg19 for
-    humans and mm9 and mm10 for mouse.}
+  \item{gbuild}{Genome build. Available builds are hg18, hg19 and hg38
+    for humans and mm9 and mm10 for mouse.}
 }
 \value{
   A vector of GC percentage values corresponding to the genomic positions.
