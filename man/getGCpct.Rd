@@ -7,7 +7,8 @@
   1000 base window centered at the genomic position.
 }
 \usage{
-  getGCpct(chrom, pos, gbuild = c("hg19", "hg38", "hg18", "mm9", "mm10"))
+  getGCpct(chrom, pos, gbuild = c("hg19", "hg38", "hg18", "mm9", "mm10",
+           "udef"), gcpctdb=NULL)
 }
 \arguments{
   \item{chrom}{Chromosome of interest. Only one chromosome can be
@@ -15,7 +16,16 @@
     MT(25). For  mouse it can be 1-19, X(20), Y(21) or MT(22).}
   \item{pos}{Genomic positions in the chromosome of interest}
   \item{gbuild}{Genome build. Available builds are hg18, hg19 and hg38
-    for humans and mm9 and mm10 for mouse.}
+    for humans and mm9 and mm10 for mouse. udef is for user-defined. If
+    udef option is used the user must suppy the database.}
+  \item{gcpctdb}{GC percentage database to be used for udef option. The
+    GC percentage data base is a list of numeric vectors with the names
+    corresponding to the chromosome it comes from. For instance, if data
+    from dog (canFam3) is to be analyzed the names should be 1 through
+    38 for the autosomes and X. The numeric vector gives the GC
+    percentage for sliding windows of 1000 bases in steps of 100
+    i.e. 1-1000, 101-1100 etc. No interval can be skipped i.e, use NA if
+    GC percentage cannot be calculated.}
 }
 \value{
   A vector of GC percentage values corresponding to the genomic positions.
@@ -27,5 +37,8 @@
   pos <- sort(sample(249250000, 10))
   getGCpct(1, pos)
   getGCpct(1, pos, "hg18")
+  # user defined
+  data(hg18)
+  getGCpct(1, pos, "udef", hg18)
 }
 \keyword{data}
