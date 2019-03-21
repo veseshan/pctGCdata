@@ -1,26 +1,23 @@
-getGCpct <- function(chrom, pos, gbuild=c("hg19", "hg38", "hg18", "mm9", "mm10")) {
+getGCpct <- function(chrom, pos, gbuild=c("hg19", "hg38", "hg18", "mm9", "mm10", "udef"), gcpctdb=NULL) {
     gbuild <- match.arg(gbuild)
+    # if the needed genome build is in workspace set it to gcpctdb
+    if (gbuild != "udef") {
+        gcpctdb <- get(gbuild, pos="package:pctGCdata")
+    } else {
+        if (missing(gcpctdb)) stop("GC percent data should be supplied if udef option is used")
+    }
     # check that the chromosome is valid
     if (length(chrom) > 1) {
         warning("only the first element of chrom is used")
         chrom <- chrom[1]
     }
-    if (gbuild %in% c("hg19", "hg38", "hg18")) {
-        if (is.character(chrom)) {
-            chrom <- match(chrom, c(1:22, "X", "Y", "MT"))
-        } else {
-            chrom <- match(chrom, 1:25)
-        }
+    # match the supplied chrom against the names or number
+    if (is.character(chrom)) {
+        chrom <- match(chrom, names(gcpctdb))
     } else {
-        if (is.character(chrom)) {
-            chrom <- match(chrom, c(1:19, "X", "Y", "MT"))
-        } else {
-            chrom <- match(chrom, 1:22)
-        }
+        chrom <- match(chrom, 1:length(gcpctdb))
     }
     if (is.na(chrom)) stop("incorrect chrom sepcification")
-    # if the needed genome build is in workspace set it to gcpctdb
-    gcpctdb <- get(gbuild, pos="package:pctGCdata")
     # gc percentages of specified chromosome
     gcpct <- gcpctdb[[chrom]]
     # left and right intervals for the genomic positions

@@ -1,1 +1,3 @@
 ^ReadMe.md$
+^\.travis\.yml$
+^appveyor\.yml$ 
