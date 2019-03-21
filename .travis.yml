@@ -1,32 +1,38 @@
-# Sample .travis.yml for R projects.
+#----------------------------------------------------------------
+# Travis-CI configuration for R packages
 #
-# See README.md for instructions, or for more configuration options,
-# see the wiki:
-#   https://github.com/craigcitro/r-travis/wiki
-
-language: c
-sudo: required
+# REFERENCES:
+# * Travis CI: https://docs.travis-ci.com/user/languages/r
+# * covr: https://github.com/jimhester/covr
+#
+# Validate your .travis.yml file at http://lint.travis-ci.org/
+#----------------------------------------------------------------
+language: r
+sudo: false
 cache: packages
+warnings_are_errors: false
+r_check_args: --as-cran
+latex: true
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
+matrix:
+  include:
+    - os: linux
+      r: oldrel
+    - os: linux
+      r: release
+      r_github_packages:
+      - jimhester/covr
+      after_success:
+      - Rscript -e 'covr::codecov(quiet=FALSE)'
+      env: NB='w/ covr' ## Just a label
+    - os: linux
+      r: devel
+    - os: osx
+      r: oldrel
+    - os: osx
+      r: release
 
-install:
-  - ./travis-tool.sh install_bioc_deps
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh install_github r-lib/covr
 
-
-script: ./travis-tool.sh run_tests
-
-after_failure:
-  - ./travis-tool.sh dump_logs
-
-after_success:
-  - Rscript -e 'covr::codecov()'
-  
 notifications:
   email:
     on_success: change
